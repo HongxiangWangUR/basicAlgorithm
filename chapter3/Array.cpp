@@ -136,14 +136,13 @@ namespace ArrayTest{
 		cout<<"<--- finish to test Array"<<endl;
 
 		cout<<"begin to test insert sort -->"<<endl;
-		int *p=new int[10]{9,8,7,6,5,4,3,2,1,0};
+		int p[10]={10,9,8,7,6,5,4,3,2,1};
 		insertSort(p,10);
 		cout<<"after sort:"<<endl;
 		for(auto cur=p;cur!=p+10;cur++){
 			cout<<*cur<<" ";
 		}
 		cout<<endl;
-		delete [] p;
 		cout<<"<-- finish to test insert sort"<<endl;
 	}
 }
