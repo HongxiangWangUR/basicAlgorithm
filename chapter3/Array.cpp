@@ -143,6 +143,7 @@ namespace ArrayTest{
 			cout<<*cur<<" ";
 		}
 		cout<<endl;
+
 		cout<<"<-- finish to test insert sort"<<endl;
 	}
 }
