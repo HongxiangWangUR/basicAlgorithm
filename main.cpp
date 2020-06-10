@@ -13,7 +13,7 @@ void test_chapter_1(){
 void test_chapter_3(){
 	cout<<"=>> test chapter 3"<<endl;
 	// ArrayTest::GameTest();
-	// ListTest::testNode();
-	CipherTest::cipherTest();
+	ListTest::test();
+	// CipherTest::cipherTest();
 	cout<<"finish to test chapter 3 <<="<<endl;
 }
