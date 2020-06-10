@@ -26,7 +26,7 @@ private:
 };
 
 template<typename T> class SinglyLinkedList{
-	friend std::ostream& operator<<(std::ostream& out,const SinglyLinkedList<T> &list);
+	friend std::ostream& operator<<<T>(std::ostream& out,const SinglyLinkedList<T> &list);
 	private:
 	ListNode<T> *head;
 	ListNode<T> *tail;
@@ -89,6 +89,7 @@ template<class T> std::ostream& operator<<(std::ostream& out,const SinglyLinkedL
 	ListNode<T> *cursor=list.head;
 	while(cursor != nullptr && cursor!= list.tail->getNext()){
 		std::cout<<cursor->getElem()<<"->";
+		cursor=cursor->getNext();
 	}
 	std::cout<<"END"<<std::endl;
 	return out;
