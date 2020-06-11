@@ -52,6 +52,17 @@ template<typename T> class SinglyLinkedList{
 	void addFirst(T elem);
 	void addLast(T elem);
 	ListNode<T>* removeFirst();
+
+	~SinglyLinkedList(){
+		if(head==nullptr){
+			delete head;
+			head=nullptr;
+		}
+		if(tail==nullptr){
+			delete tail;
+			tail=nullptr;
+		}
+	}
 };
 
 template <class T> void SinglyLinkedList<T>::addFirst(T elem){
@@ -96,10 +107,16 @@ template<class T> std::ostream& operator<<(std::ostream& out,const SinglyLinkedL
 }
 namespace ListTest{
 	void test(){
+		std::cout<<">>>---------> 开始测试单链表 ------->>"<<std::endl;
 		using namespace std;
 		SinglyLinkedList<int> list;
+		std::cout<<" 测试 addFirst() 方法 "<<std::endl;
 		list.addFirst(1);list.addFirst(2);list.addFirst(3);
 		std::cout<<list;
-
+		std::cout<<" 测试 addLast() 方法 "<<std::endl;
+		list.addLast(4);list.addLast(5);list.addLast(6);
+		std::cout<<list;
+		std::cout<<" 链表的大小: "<<list.getSize()<<endl;
+		std::cout<<"<<--------<<  测试单点链表完成 <--------<<<"<<std::endl;
 	}
 }
