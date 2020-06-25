@@ -105,10 +105,103 @@ template<class T> std::ostream& operator<<(std::ostream& out,const SinglyLinkedL
 	std::cout<<"END"<<std::endl;
 	return out;
 }
+
+template <typename T> class CircularList{
+	friend std::ostream& operator<<<T>(std::ostream& out,CircularList<T>& list);
+	public:
+	CircularList():tail(nullptr),size(0){}
+
+	size_t getSize(){
+		return this->size;
+	}
+
+	bool isEmpty(){
+		return getSize() <= 0;
+	}
+
+	ListNode<T>* first(){
+		if(tail==nullptr){
+			return nullptr;
+		}
+		return tail->getNext();
+	}
+
+	ListNode<T>* last(){
+		if(isEmpty()){
+			return nullptr;
+		}
+		else{
+			return tail;
+		}
+	}
+
+	void addFirst(T elem){
+		ListNode<T> node(elem,nullptr);
+		if(this->isEmpty()){
+			tail=&node;
+			tail->setNext(tail);
+		}else{
+			node->setNext(tail->getNext());
+			tail->setNext(&node);
+		}
+		size++;
+	}
+
+	void addLast(T elem){
+		ListNode<T> node(elem,nullptr);
+		if(this->isEmpty()){
+			tail=&node;
+			tail->setNext(tail);
+		}else{
+			node.setNext(tail->getNext());
+			tail->setNext(&node);
+			tail=&node;
+		}
+		size++;
+	}
+
+	ListNode<T>* removeFirst(){
+		if(isEmpty()){
+			return nullptr;
+		}
+		ListNode<T>* ret=tail->getNext();
+		if(getSize() == 1){
+			tail=nullptr;
+		}else{
+			tail->setNext(tail->getNext()->getNext());
+			ret->setNext(nullptr);
+		}
+		size--;
+		return ret;
+	}
+	private:
+	ListNode<T>* tail;
+	size_t size;
+};
+
+template<class T> std::ostream& operator<<(std::ostream& out,CircularList<T>& list){
+	ListNode<T>* cursor=list.first();
+	while(cursor!=list.last()){
+		std::cout<<cursor->getElem()<<"->";
+		cursor=cursor->getNext();
+	}
+	if(cursor!=nullptr){
+		std::cout<<cursor->getElem()<<"->";
+	}
+	if(cursor!=nullptr){
+		std::cout<<"HEAD"<<std::endl;
+	}else{
+		std::cout<<"END"<<std::endl;
+	}
+}
 namespace ListTest{
 	void test(){
+		//testSinglyLinkedList();
+		testCircularList();
+	}
+
+	void testSinglyLinkedList(){
 		std::cout<<">>>---------> 开始测试单链表 ------->>"<<std::endl;
-		using namespace std;
 		SinglyLinkedList<int> list;
 		std::cout<<" 测试 addFirst() 方法 "<<std::endl;
 		list.addFirst(1);list.addFirst(2);list.addFirst(3);
@@ -116,7 +209,16 @@ namespace ListTest{
 		std::cout<<" 测试 addLast() 方法 "<<std::endl;
 		list.addLast(4);list.addLast(5);list.addLast(6);
 		std::cout<<list;
-		std::cout<<" 链表的大小: "<<list.getSize()<<endl;
+		std::cout<<" 链表的大小: "<<list.getSize()<<std::endl;
 		std::cout<<"<<--------<<  测试单点链表完成 <--------<<<"<<std::endl;
+	}
+
+	void testCircularList(){
+		using namespace std;
+		cout<<">> ----> 开始测试循环链表 >> ------>"<<endl;
+		CircularList<int> list;
+		cout<<"测试addFirst()和addLast()方法"<<endl;
+		list.addLast(1);list.addLast(2);list.addLast(3);
+		cout<<list;
 	}
 }
