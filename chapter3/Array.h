@@ -1,6 +1,6 @@
 #ifndef Array
 #define Array
-#include "../common.h"
+#include "../common.hpp"
 class GameEntry;
 class GameBoard;
 void insertSort(int *const pt,int size);

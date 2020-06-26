@@ -1,6 +1,6 @@
 #ifndef LIST
 #define LIST
-#include "../common.h"
+#include "../common.hpp"
 template<typename> class ListNode;
 template<typename T> class SinglyLinkedList;
 template <typename T> class CircularList;

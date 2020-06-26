@@ -1,6 +1,6 @@
 #ifndef CIPHER
 #define CIPHER
-#include "../common.h"
+#include "../common.hpp"
 namespace CipherTest{
     void cipherTest();
 }
