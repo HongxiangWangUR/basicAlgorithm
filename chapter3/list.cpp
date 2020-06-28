@@ -136,26 +136,26 @@ template <typename T> class CircularList{
 	}
 
 	void addFirst(T elem){
-		ListNode<T> node(elem,nullptr);
+		ListNode<T> *node=new ListNode<int>(elem,nullptr);
 		if(this->isEmpty()){
-			tail=&node;
+			tail=node;
 			tail->setNext(tail);
 		}else{
 			node->setNext(tail->getNext());
-			tail->setNext(&node);
+			tail->setNext(node);
 		}
 		size++;
 	}
 
 	void addLast(T elem){
-		ListNode<T> node(elem,nullptr);
+		ListNode<T> *node=new ListNode<int>(elem,nullptr);
 		if(this->isEmpty()){
-			tail=&node;
+			tail=node;
 			tail->setNext(tail);
 		}else{
-			node.setNext(tail->getNext());
-			tail->setNext(&node);
-			tail=&node;
+			node->setNext(tail->getNext());
+			tail->setNext(node);
+			tail=node;
 		}
 		size++;
 	}
@@ -166,6 +166,7 @@ template <typename T> class CircularList{
 		}
 		ListNode<T>* ret=tail->getNext();
 		if(getSize() == 1){
+			ret->setNext(nullptr);
 			tail=nullptr;
 		}else{
 			tail->setNext(tail->getNext()->getNext());
@@ -174,6 +175,14 @@ template <typename T> class CircularList{
 		size--;
 		return ret;
 	}
+
+	~CircularList(){
+		if(tail != nullptr){
+			ListNode<T>* head=tail->getNext();
+			tail->setNext(nullptr);
+			delete head;
+		}
+	}
 	private:
 	ListNode<T>* tail;
 	size_t size;
@@ -181,7 +190,7 @@ template <typename T> class CircularList{
 
 template<class T> std::ostream& operator<<(std::ostream& out,CircularList<T>& list){
 	ListNode<T>* cursor=list.first();
-	while(cursor!=list.last()){
+	while(cursor!=list.last() && cursor != nullptr){
 		std::cout<<cursor->getElem()<<"->";
 		cursor=cursor->getNext();
 	}
@@ -193,6 +202,7 @@ template<class T> std::ostream& operator<<(std::ostream& out,CircularList<T>& li
 	}else{
 		std::cout<<"END"<<std::endl;
 	}
+	return out;
 }
 namespace ListTest{
 	void test(){
@@ -214,11 +224,17 @@ namespace ListTest{
 	}
 
 	void testCircularList(){
-		using namespace std;
-		cout<<">> ----> 开始测试循环链表 >> ------>"<<endl;
+		std::cout<<">> ----> 开始测试循环链表 >> ------>"<<std::endl;
 		CircularList<int> list;
-		cout<<"测试addFirst()和addLast()方法"<<endl;
+		std::cout<<"测试addLast()方法"<<std::endl;
 		list.addLast(1);list.addLast(2);list.addLast(3);
-		cout<<list;
+		std::cout<<list;
+		std::cout<<"测试removeFirst()方法"<<std::endl;
+		list.removeFirst();
+		std::cout<<list;
+		std::cout<<"测试addFirst()方法"<<std::endl;
+		list.addFirst(4);
+		std::cout<<list;
+		std::cout<<"<< -------<< 测试循环链表完成 << -----<<"<<std::endl;
 	}
 }
