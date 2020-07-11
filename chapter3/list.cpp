@@ -208,7 +208,7 @@ template<class T> std::ostream& operator<<(std::ostream& out,CircularList<T>& li
 template<class T> std::ostream& operator<<(std::ostream& out,DoubleLinkedList<T>& list){
 	typename DoubleLinkedList<T>::Node* cursor=list.getFirst();
 	while(cursor != nullptr){
-		out<<cursor->getElement()<<std::endl;
+		out<<cursor->getElement()<<"->";
 		cursor=cursor->getNext();
 	}
 	out<<"NULL"<<std::endl;
@@ -277,22 +277,33 @@ template<typename T> typename DoubleLinkedList<T>::Node* DoubleLinkedList<T>::No
 }
 
 template<class T> DoubleLinkedList<T>::Node::~Node(){
-	if(this->next != nullptr){
-		std::cout<<"销毁元素: "<<this->elem<<std::endl;
-		delete this->next;
-	}
+	std::cout<<"销毁元素: "<<this->elem<<std::endl;
+	this->next=nullptr;
+	this->prev=nullptr;
 }
 
 template<class T> DoubleLinkedList<T>::~DoubleLinkedList(){
-	delete this->head;
+	typename DoubleLinkedList<T>::Node* cursor=getLast();
+	while(cursor!=this->head){
+		typename DoubleLinkedList<T>::Node* temp=cursor->getPrev();
+		delete cursor;
+		cursor=temp;
+	}
+	if(cursor!=nullptr){
+		delete cursor;
+	}
 }
 
 template<typename T> void DoubleLinkedList<T>::addFirst(Node* n){
 	if(head==nullptr || tail== nullptr){
 		head=n;
 		tail=n;
+		n->setPrev(nullptr);
+		n->setNext(nullptr);
 	}else{
 		n->setNext(head);
+		n->setPrev(nullptr);
+		head->setPrev(n);
 		head=n;
 	}
 	this->size++;
@@ -302,8 +313,12 @@ template<typename T> void DoubleLinkedList<T>::addLast(Node* n){
 	if(isEmpty()){
 		this->head=n;
 		this->tail=n;
+		n->setPrev(nullptr);
+		n->setNext(nullptr);
 	}else{
 		this->tail->setNext(n);
+		n->setPrev(tail);
+		n->setNext(nullptr);
 		tail=n;
 	}
 	this->size++;
@@ -350,6 +365,7 @@ namespace ListTest{
 		list.addFirst(new DoubleLinkedList<int>::Node(1));list.addLast(new DoubleLinkedList<int>::Node(2));
 		list.addFirst(new DoubleLinkedList<int>::Node(3));
 		std::cout<<list;
+		DoubleLinkedList<int>::Node* cursor=list.getLast();
 		std::cout<<"<< ---------< 测试双向链表完成 << -------<<"<<std::endl;
 	}
 }
