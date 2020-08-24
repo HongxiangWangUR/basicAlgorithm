@@ -1,4 +1,4 @@
-#include "cipher.h"
+#include "cipher.hpp"
 class cipher{
 public:
     cipher(size_t rot=9):rotate(rot%26){}

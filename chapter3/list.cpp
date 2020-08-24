@@ -207,6 +207,7 @@ template<class T> std::ostream& operator<<(std::ostream& out,CircularList<T>& li
 
 template<class T> std::ostream& operator<<(std::ostream& out,DoubleLinkedList<T>& list){
 	typename DoubleLinkedList<T>::Node* cursor=list.getFirst();
+	out<<"doublelinkedlist current state: ";
 	while(cursor != nullptr){
 		out<<cursor->getElement()<<"->";
 		cursor=cursor->getNext();
@@ -265,6 +266,7 @@ template<typename T> class DoubleLinkedList{
 	Node* removeFirst();
 	Node* removeLast();
 	Node* remove(Node* n);
+	void addBetween(Node* prev,Node* next,T value);
 	~DoubleLinkedList();
 	private:
 	size_t size;
@@ -324,6 +326,68 @@ template<typename T> void DoubleLinkedList<T>::addLast(Node* n){
 	this->size++;
 }
 
+template<typename T> typename DoubleLinkedList<T>::Node* DoubleLinkedList<T>::removeFirst(){
+	if(this->isEmpty()){
+		return nullptr;
+	}
+	Node* ret=this->getFirst();
+	if(ret->getNext() == nullptr){
+		this->head=nullptr;
+		this->tail=nullptr;
+	}else{
+		this->head=this->head->getNext();
+		if(this->head==nullptr){
+			this->tail=nullptr;
+		}else{
+			this->head->setPrev(nullptr);
+		}
+	}
+	ret->setNext(nullptr);
+	ret->setPrev(nullptr);
+	this->size--;
+	return ret;
+}
+
+template<class T> typename DoubleLinkedList<T>::Node* DoubleLinkedList<T>::removeLast(){
+	if(this->isEmpty()){
+		return nullptr;
+	}
+	Node* ret=this->tail;
+
+	if(this->getSize()==1){
+		this->head=nullptr;
+		this->tail=nullptr;
+	}else{
+		ret->getPrev()->setNext(nullptr);
+		this->tail=ret->getPrev();
+	}
+	ret->setNext(nullptr);
+	ret->setPrev(nullptr);
+	this->size--;
+	return ret;
+}
+
+template<typename T> typename DoubleLinkedList<T>::Node* DoubleLinkedList<T>::remove(Node* n){
+	if(n==nullptr){
+		return nullptr;
+	}
+	Node* prev=n->getPrev();
+	Node* next=n->getNext();
+
+	prev->setNext(next);
+	next->setPrev(prev);
+	return n;
+}
+
+template<class T> void DoubleLinkedList<T>::addBetween(Node* prev,Node* next,T value){
+	Node* node=new Node(value);
+	prev->setNext(node);
+	next->setPrev(node);
+	node->setNext(next);
+	node->setPrev(prev);
+	this->size++;
+}
+
 namespace ListTest{
 	void test(){
 		//testSinglyLinkedList();
@@ -362,10 +426,17 @@ namespace ListTest{
 	void testDoubleLinkedList(){
 		std::cout<<">> ------> 开始测试双向链表 >> ----->"<<std::endl;
 		DoubleLinkedList<int> list;
-		list.addFirst(new DoubleLinkedList<int>::Node(1));list.addLast(new DoubleLinkedList<int>::Node(2));
-		list.addFirst(new DoubleLinkedList<int>::Node(3));
+		DoubleLinkedList<int>::Node* elem1=new DoubleLinkedList<int>::Node(1);
+		DoubleLinkedList<int>::Node* elem2=new DoubleLinkedList<int>::Node(2);
+		list.addFirst(elem1);list.addLast(elem2);
+		list.addFirst(new DoubleLinkedList<int>::Node(3));list.addLast(new DoubleLinkedList<int>::Node(4));
 		std::cout<<list;
-		DoubleLinkedList<int>::Node* cursor=list.getLast();
+		list.removeFirst();
+		std::cout<<list;
+		list.removeLast();
+		std::cout<<list;
+		list.addBetween(elem1,elem2,5);
+		std::cout<<list;
 		std::cout<<"<< ---------< 测试双向链表完成 << -------<<"<<std::endl;
 	}
 }
